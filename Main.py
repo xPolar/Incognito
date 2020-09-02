@@ -14,7 +14,7 @@ def get_prefix(ctx):
     """Retrive document from database and return the stored prefix if it exists, if not return the default prefix.
 
     Args:
-        ctx (context): discord.py's context object
+        ctx (Context): discord.py's context object
 
     Returns:
         str: The prefix that will be returned.
@@ -28,12 +28,12 @@ def get_prefix(ctx):
 bot = commands.AutoShardedBot(command_prefix = "$", case_insensitive = True)
 
 # All of the cogs within the bot that we want to load
-COGS = ["Ping"]
+COGS = ["Ping", "Help", "Kick", "Modlog"]
 
 # Loads all of our cogs
 for COG in COGS:
     bot.load_extension(f"Cogs.{COG}")
-    print(f"{Style.BRIGHT}{Fore.GREEN}[SUCCESS]{Fore.WHITE} Loaded Cogs.{COG}")
+    print(f"{Style.BRIGHT}{Fore.GREEN}[SUCCESS]{Fore.WHITE} Loaded Command: {COG}")
 
 async def owner(ctx):
     return ctx.author.id in Config.OWNER_IDS
@@ -45,14 +45,14 @@ async def restart(ctx):
     Restart the bot's cogs.
     """
     print()
-    for COG in COGS:
-        bot.reload_extension(f"Cogs.{COG}")
-        print(f"{Style.BRIGHT}{Fore.GREEN}[SUCCESS]{Fore.WHITE} Reloaded Cogs.{COG}")
     embed = discord.Embed(
         title = "Bot Restarted",
-        description = "All cogs have been reloaded!",
         color = Config.MAINCOLOR
     )
+    for COG in COGS:
+        bot.reload_extension(f"Cogs.{COG}")
+        print(f"{Style.BRIGHT}{Fore.GREEN}[SUCCESS]{Fore.WHITE} Reloaded Command: {COG}")
+    embed.set_image(url = "https://repository-images.githubusercontent.com/190097423/9bf7ca80-ebe4-11ea-9177-f489db27c759")
     await ctx.send(embed = embed)
     print(f"{Style.BRIGHT}{Fore.CYAN}[BOT-RESTARTED]{Fore.WHITE} Restart by {ctx.author} - {ctx.author.id}, I'm currently in {len(bot.guilds)} servers with {len(bot.users)} users!")
 
